@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#5C3D2E',
+    color: '#732255',
     textAlign: 'center',
     marginBottom: 5
   },
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#5C3D2E',
+    color: '#732255',
     marginBottom: 5
   },
   cardText: {

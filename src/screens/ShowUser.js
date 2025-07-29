@@ -80,21 +80,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#5C3D2E",
+    color: "#732255",
     textAlign: "center",
     marginBottom: 5,
   },
   subtitle: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#5C3D2E",
+    color: "#732255",
     textAlign: "center",
     marginBottom: 10,
   },
   counterText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#3B2C24",
+    color: "#111111",
     textAlign: "center",
     marginBottom: 10,
   },
@@ -112,12 +112,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#5C3D2E",
+    color: "#732255",
     marginBottom: 5,
   },
   cardText: {
     fontSize: 16,
-    color: "#3B2C24",
+    color: "#111111",
   },
 });
 

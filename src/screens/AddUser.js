@@ -86,18 +86,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#5C3D2E'
+    color: '#732255'
   },
   subtitle: {
     fontSize: 18,
     textAlign: 'center',
     marginBottom: 20,
-    color: '#5C3D2E'
+    color: '#732255'
   },
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#5C3D2E',
+    borderColor: '#732255',
     borderRadius: 8,
     padding: 12,
     marginVertical: 10,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   button: {
-    backgroundColor: '#5C3D2E',
+    backgroundColor: '#732255',
     padding: 15,
     borderRadius: 10,
     width: '100%',
