@@ -1,21 +1,21 @@
-import { NavigationContainer } from '@react-navigation/native'; // Importa el contenedor de navegación
-import { createNativeStackNavigator } from '@react-navigation/native-stack'; // Importa el creador de stack navigator
+import { NavigationContainer } from '@react-navigation/native'; 
+import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 
-import Home from '../screens/Home.js'; // Importa la pantalla de Sesión
-import ShowUser from '../screens/ShowUser.js'; // Importa la pantalla de Sesión
-import AddUser from '../screens/AddUser.js'; // Importa la pantalla de Sesión
-import TabNavigator from './TabNavigator'; // Importa el navegador de pestañas
+import Home from '../screens/Home.js'; 
+import ShowUser from '../screens/ShowUser.js'; 
+import AddUser from '../screens/AddUser.js'; 
+import TabNavigator from './TabNavigator'; 
 
 export default function Navigation() {
 
-  const Stack = createNativeStackNavigator(); // Crea una instancia del stack navigator
+  const Stack = createNativeStackNavigator(); 
 
   return (
     <NavigationContainer> 
       <Stack.Navigator
-        initialRouteName='TabNavigator' // Establece 'Sesion' como la ruta inicial
+        initialRouteName='TabNavigator' 
         screenOptions={{
-          headerShown: false // Oculta el header por defecto
+          headerShown: false 
         }}>
         <Stack.Screen name="Home" component={Home} /> 
         <Stack.Screen name="ShowUser" component={ShowUser} /> 

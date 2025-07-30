@@ -7,25 +7,17 @@ const useFetchUser = () => {
   const [edad, setEdad] = useState("");
   const [correo, setCorreo] = useState("");
 
-  // Estados para la lista de usuarios
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Obtener usuarios desde la API
   const fetchUsuarios = async () => {
     setLoading(true);
     try {
       const response = await fetch("https://retoolapi.dev/zZhXYF/movil");
-
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        setUsuarios(data);
-      } else {
-        const text = await response.text();
-        console.error("Respuesta no válida:", text);
-        Alert.alert("Error", "La respuesta de la API no es válida.");
-      }
+  
+      const data = await response.json();
+  
+      setUsuarios(data);  
     } catch (error) {
       console.error("Error al cargar usuarios:", error);
       Alert.alert("Error", "No se pudieron cargar los usuarios");
@@ -33,6 +25,8 @@ const useFetchUser = () => {
       setLoading(false);
     }
   };
+  
+  
 
   // Guardar nuevo usuario
   const handleGuardar = async () => {
@@ -59,10 +53,13 @@ const useFetchUser = () => {
         setNombre("");
         setEdad("");
         setCorreo("");
-        fetchUsuarios(); // Actualizar lista
+        fetchUsuarios(); 
       } else {
+        const errorText = await response.text(); 
+        console.error(" Error al guardar usuario:", errorText); 
         Alert.alert("Error", "No se pudo guardar el usuario");
       }
+      
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Ocurrió un error al enviar los datos");
@@ -72,21 +69,29 @@ const useFetchUser = () => {
   // Eliminar usuario
   const handleEliminar = async (id) => {
     try {
-      await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
+      const response = await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
         method: "DELETE",
       });
-      fetchUsuarios(); // Actualizar lista
-      Alert.alert("Éxito", "Usuario eliminado");
+  
+      if (response.ok) {
+        Alert.alert("Éxito", "Usuario eliminado");
+        fetchUsuarios();
+      } else {
+        const errorText = await response.text();
+        console.error("Error al eliminar:", errorText);
+        Alert.alert("Error", "No se pudo eliminar el usuario");
+      }
     } catch (error) {
       console.error("Error al eliminar:", error);
       Alert.alert("Error", "No se pudo eliminar el usuario");
     }
   };
+  
 
   // Actualizar usuario
   const handleActualizar = async (id, nombre, edad, correo) => {
     try {
-      await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
+      const response = await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -97,13 +102,29 @@ const useFetchUser = () => {
           correo,
         }),
       });
-      fetchUsuarios(); // Actualizar lista
-      Alert.alert("Éxito", "Usuario actualizado");
+  
+      if (response.ok) {
+        setUsuarios((prev) =>
+          prev.map((user) =>
+            user.id === id
+              ? { ...user, nombre, edad: parseInt(edad), correo }
+              : user
+          )
+        );
+  
+        Alert.alert("Éxito", "Usuario actualizado");
+      } else {
+        const errorText = await response.text();
+        console.error("Error al actualizar:", errorText);
+        Alert.alert("Error", "No se pudo actualizar el usuario");
+      }
     } catch (error) {
       console.error("Error al actualizar:", error);
       Alert.alert("Error", "No se pudo actualizar el usuario");
     }
   };
+  
+  
 
   useEffect(() => {
     fetchUsuarios();
@@ -120,8 +141,8 @@ const useFetchUser = () => {
     usuarios,
     loading,
     fetchUsuarios,
-    handleEliminar,      // 👈 asegúrate de incluir esto
-    handleActualizar     // 👈 y esto también
+    handleEliminar,      
+    handleActualizar     
   };
 };
 

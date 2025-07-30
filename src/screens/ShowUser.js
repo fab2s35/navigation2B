@@ -1,29 +1,43 @@
-//using https://retool.com/api-generator#iframe-section
-
-//la siguiente direccion: https://retoolapi.dev/zZhXYF/movil
-
-/*
-información de la api
-{
-id: 1,
-edad: 84,
-correo: "-",
-nombre: "Filippa Gwillim"
-},
-*/
-import React, { useCallback } from "react";
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, SafeAreaView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import CardUser from "../components/users/CardUser";
-import useFetchUser from "../hooks/useFetchUser";
+import { useUser } from "../context/userContext";
+import EditUserModal from "../components/users/editUserModal";
 
 const ShowUser = () => {
-  const { usuarios, loading, fetchUsuarios, handleEliminar } = useFetchUser();
+  const { usuarios, loading, fetchUsuarios, handleEliminar } = useUser();
   const navigation = useNavigation();
 
-  const handleEdit = (user) => {
-    navigation.navigate("AddUser", { user }); // Reutiliza AddUser como Editar
+  const [modalVisible, setModalVisible] = useState(false);
+  const [userToEdit, setUserToEdit] = useState(null);
+
+  const openEditModal = (user) => {
+    setUserToEdit(user);
+    setModalVisible(true);
   };
+
+  const closeEditModal = () => {
+    setUserToEdit(null);
+    setModalVisible(false);
+  };
+
+  const handleAddUser = () => {
+    navigation.navigate("AddUser"); 
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUsuarios(); 
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,6 +46,7 @@ const ShowUser = () => {
         <Text style={styles.counterText}>Total de usuarios: {usuarios.length}</Text>
       )}
 
+
       {loading ? (
         <ActivityIndicator size="large" color="#5C3D2E" style={{ marginTop: 20 }} />
       ) : (
@@ -39,15 +54,20 @@ const ShowUser = () => {
           data={usuarios}
           keyExtractor={(user) => user.id.toString()}
           renderItem={({ item }) => (
-            <CardUser user={item} onEdit={handleEdit} onDelete={handleEliminar} />
+            <CardUser
+              user={item}
+              onEdit={() => openEditModal(item)}
+              onDelete={() => handleEliminar(item.id)}
+            />
           )}
           contentContainerStyle={styles.listContainer}
         />
       )}
+
+      <EditUserModal visible={modalVisible} onClose={closeEditModal} userToEdit={userToEdit} />
     </SafeAreaView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -66,41 +86,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 5,
   },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#732255",
-    textAlign: "center",
-    marginBottom: 10,
-  },
   counterText: {
     fontSize: 16,
     fontWeight: "600",
     color: "#111111",
     textAlign: "center",
     marginBottom: 10,
-  },
-  card: {
-    backgroundColor: "#FFF",
-    borderRadius: 12,
-    padding: 20,
-    marginVertical: 10,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 1, height: 2 },
-    shadowRadius: 4,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#732255",
-    marginBottom: 5,
-  },
-  cardText: {
-    fontSize: 16,
-    color: "#111111",
-  },
+  }
 });
 
 export default ShowUser;

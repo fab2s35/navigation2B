@@ -1,16 +1,3 @@
-//using https://retool.com/api-generator#iframe-section 
-
-//la siguiente direccion: https://retoolapi.dev/zZhXYF/movil
-
-/*
-información de la api
-{
-id: 1,
-edad: 84,
-correo: "-",
-nombre: "Filippa Gwillim"
-},
-*/// AddUser.js
 import React, { useEffect } from 'react';
 import {
   View,
@@ -22,7 +9,7 @@ import {
   ScrollView
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import useFetchUser from '../hooks/useFetchUser';
+import { useUser } from "../context/userContext";
 
 const AddUser = () => {
   const route = useRoute();
@@ -37,7 +24,7 @@ const AddUser = () => {
     setCorreo,
     handleGuardar,
     handleActualizar
-  } = useFetchUser();
+  } = useUser();
 
   useEffect(() => {
     if (usuarioEditar) {

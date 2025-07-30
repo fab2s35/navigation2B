@@ -77,14 +77,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   editButton: {
-    backgroundColor: "#FFA500",
+    backgroundColor: "#a5b5a1",
     padding: 10,
     borderRadius: 8,
     flex: 1,
     marginRight: 5,
   },
   deleteButton: {
-    backgroundColor: "#D11A2A",
+    backgroundColor: "#E55050",
     padding: 10,
     borderRadius: 8,
     flex: 1,
