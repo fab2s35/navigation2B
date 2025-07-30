@@ -11,7 +11,7 @@ correo: "-",
 nombre: "Filippa Gwillim"
 },
 */// AddUser.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -21,33 +21,49 @@ import {
   Alert,
   ScrollView
 } from 'react-native';
-
+import { useRoute } from '@react-navigation/native';
 import useFetchUser from '../hooks/useFetchUser';
 
 const AddUser = () => {
+  const route = useRoute();
+  const usuarioEditar = route.params?.user;
+
   const {
     nombre,
-    edad,
-    correo,
     setNombre,
+    edad,
     setEdad,
+    correo,
     setCorreo,
-    handleGuardar
+    handleGuardar,
+    handleActualizar
   } = useFetchUser();
+
+  useEffect(() => {
+    if (usuarioEditar) {
+      setNombre(usuarioEditar.nombre);
+      setEdad(usuarioEditar.edad.toString());
+      setCorreo(usuarioEditar.correo);
+    }
+  }, [usuarioEditar]);
+
+  const handleSubmit = () => {
+    if (usuarioEditar) {
+      handleActualizar(usuarioEditar.id, nombre, edad, correo);
+    } else {
+      handleGuardar();
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Agregar Usuario</Text>
-      <Text style={styles.subtitle}>
-        Ingresa la información del nuevo usuario
-      </Text>
+      <Text style={styles.title}>{usuarioEditar ? "Editar Usuario" : "Agregar Usuario"}</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Nombre"
         value={nombre}
         onChangeText={setNombre}
-        placeholderTextColor="#A1866F"
       />
       <TextInput
         style={styles.input}
@@ -55,7 +71,6 @@ const AddUser = () => {
         value={edad}
         onChangeText={setEdad}
         keyboardType="numeric"
-        placeholderTextColor="#A1866F"
       />
       <TextInput
         style={styles.input}
@@ -63,11 +78,10 @@ const AddUser = () => {
         value={correo}
         onChangeText={setCorreo}
         keyboardType="email-address"
-        placeholderTextColor="#A1866F"
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleGuardar}>
-        <Text style={styles.buttonText}>Guardar</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>{usuarioEditar ? "Actualizar" : "Guardar"}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

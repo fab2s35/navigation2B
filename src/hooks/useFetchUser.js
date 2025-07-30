@@ -16,16 +16,25 @@ const useFetchUser = () => {
     setLoading(true);
     try {
       const response = await fetch("https://retoolapi.dev/zZhXYF/movil");
-      const data = await response.json();
-      setUsuarios(data);
+
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        setUsuarios(data);
+      } else {
+        const text = await response.text();
+        console.error("Respuesta no válida:", text);
+        Alert.alert("Error", "La respuesta de la API no es válida.");
+      }
     } catch (error) {
       console.error("Error al cargar usuarios:", error);
+      Alert.alert("Error", "No se pudieron cargar los usuarios");
     } finally {
       setLoading(false);
     }
   };
 
-  // Guardar nuevo usuario en la API
+  // Guardar nuevo usuario
   const handleGuardar = async () => {
     if (!nombre || !edad || !correo) {
       Alert.alert("Error", "Por favor, completa todos los campos");
@@ -60,10 +69,44 @@ const useFetchUser = () => {
     }
   };
 
-  // Ejecutar al cargar componente
+  // Eliminar usuario
+  const handleEliminar = async (id) => {
+    try {
+      await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
+        method: "DELETE",
+      });
+      fetchUsuarios(); // Actualizar lista
+      Alert.alert("Éxito", "Usuario eliminado");
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+      Alert.alert("Error", "No se pudo eliminar el usuario");
+    }
+  };
+
+  // Actualizar usuario
+  const handleActualizar = async (id, nombre, edad, correo) => {
+    try {
+      await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre,
+          edad: parseInt(edad),
+          correo,
+        }),
+      });
+      fetchUsuarios(); // Actualizar lista
+      Alert.alert("Éxito", "Usuario actualizado");
+    } catch (error) {
+      console.error("Error al actualizar:", error);
+      Alert.alert("Error", "No se pudo actualizar el usuario");
+    }
+  };
+
   useEffect(() => {
     fetchUsuarios();
-    //console.log("actualizando en useEffect");
   }, []);
 
   return {
@@ -77,6 +120,8 @@ const useFetchUser = () => {
     usuarios,
     loading,
     fetchUsuarios,
+    handleEliminar,      // 👈 asegúrate de incluir esto
+    handleActualizar     // 👈 y esto también
   };
 };
 

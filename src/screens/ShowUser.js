@@ -12,60 +12,42 @@ nombre: "Filippa Gwillim"
 },
 */
 import React, { useCallback } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-  SafeAreaView,
-} from "react-native";
-
-import CardUser from "../components/users/CardUser.js";
-
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, SafeAreaView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import CardUser from "../components/users/CardUser";
 import useFetchUser from "../hooks/useFetchUser";
-import { useFocusEffect } from "@react-navigation/native";
 
 const ShowUser = () => {
-  const { usuarios, loading, fetchUsuarios } = useFetchUser();
+  const { usuarios, loading, fetchUsuarios, handleEliminar } = useFetchUser();
+  const navigation = useNavigation();
 
-  // Se ejecuta cada vez que esta pantalla se enfoca
-  useFocusEffect(
-    useCallback(() => {
-      fetchUsuarios();
-    }, [])
-  );
+  const handleEdit = (user) => {
+    navigation.navigate("AddUser", { user }); // Reutiliza AddUser como Editar
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Lista de Usuarios</Text>
-      <Text style={styles.subtitle}>
-        Consulta los usuarios registrados desde la API
-      </Text>
-
       {!loading && (
-        <Text style={styles.counterText}>
-          Total de usuarios: {usuarios.length}
-        </Text>
+        <Text style={styles.counterText}>Total de usuarios: {usuarios.length}</Text>
       )}
 
       {loading ? (
-        <ActivityIndicator
-          size="large"
-          color="#5C3D2E"
-          style={{ marginTop: 20 }}
-        />
+        <ActivityIndicator size="large" color="#5C3D2E" style={{ marginTop: 20 }} />
       ) : (
         <FlatList
           data={usuarios}
           keyExtractor={(user) => user.id.toString()}
-          renderItem={({ item }) => <CardUser user={item} />}
+          renderItem={({ item }) => (
+            <CardUser user={item} onEdit={handleEdit} onDelete={handleEliminar} />
+          )}
           contentContainerStyle={styles.listContainer}
         />
       )}
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

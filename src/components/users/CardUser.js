@@ -1,14 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-const CardUser = ({user}) => {
-  return ( 
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>{user.nombre}</Text>
-          <Text style={styles.cardText}>Edad: {user.edad}</Text>
-          <Text style={styles.cardText}>Correo: {user.correo}</Text>
-        </View>
-   );
-}
+const CardUser = ({ user, onEdit, onDelete }) => {
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>{user.nombre}</Text>
+      <Text style={styles.cardText}>Edad: {user.edad}</Text>
+      <Text style={styles.cardText}>Correo: {user.correo}</Text>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.editButton} onPress={() => onEdit(user)}>
+          <Text style={styles.buttonText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete(user.id)}>
+          <Text style={styles.buttonText}>Eliminar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -61,7 +70,31 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 16,
     color: '#3B2C24'
-  }
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+    justifyContent: "space-between",
+  },
+  editButton: {
+    backgroundColor: "#FFA500",
+    padding: 10,
+    borderRadius: 8,
+    flex: 1,
+    marginRight: 5,
+  },
+  deleteButton: {
+    backgroundColor: "#D11A2A",
+    padding: 10,
+    borderRadius: 8,
+    flex: 1,
+    marginLeft: 5,
+  },
+  buttonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
 
 export default CardUser;
